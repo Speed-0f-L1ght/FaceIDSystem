@@ -8,7 +8,7 @@ MODEL_PATH = os.path.join('src', 'models', 'ASM.dat')
 INPUT_DIR = os.path.join('src', 'img')
 OUTPUT_DIR = os.path.join('src', 'img', 'results')
 
-def main():
+def Main():
     # Создание каталога для результатов, если он отсутствует
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
@@ -26,4 +26,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    Main()
