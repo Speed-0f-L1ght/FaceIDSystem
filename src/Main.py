@@ -20,7 +20,7 @@ def Main():
 
 
     #FaceCompare.compare_new_face('Isaev.jpg', landmarker, pca, reduced_features, 0.3)
-    VideoFrame.video(landmarker, pca, reduced_features, 0.3)
+    VideoFrame.video(landmarker, pca, reduced_features, 0.5)
 
     #face_compare.compare_faces('src\img\Galkin2.jpg', 'src\img\Isaev.jpg', landmarker, pca)
 
