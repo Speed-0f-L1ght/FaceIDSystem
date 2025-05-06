@@ -28,7 +28,7 @@ def Main():
 if __name__ == "__main__":
     print(f'Запуск главного модуля..........')
     try: Main()
-    except KeyboardInterrupt as e: print(f'Работа отсановлена вручную: {e}')
+    except KeyboardInterrupt as e: print(f'Работа остановлена вручную: {e}')
     except Exception as e: print(f'Ошибка вида: {e}')
     finally: print(f'Прекращаю работу.................')
 
