@@ -3,7 +3,6 @@ import os
 import dlib
 import numpy as np
 
-import PCA_Face
 
 
 class ASMFaceLandmarker:
@@ -16,8 +15,7 @@ class ASMFaceLandmarker:
         self.predictor = dlib.shape_predictor(model_path)
 
 
-    
-    def detect_landmaks(self, img):
+    def get_faces(self, img):
         if img is None:
             raise ValueError("Передано пустое изображение!")
     
@@ -25,7 +23,9 @@ class ASMFaceLandmarker:
         if len(img.shape) == 3 and img.shape[2] == 4:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
-        # Преобразуем в оттенки серого
+        if len(img.shape) == 2:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Убедимся, что тип — uint8 и массив непрерывен
@@ -35,7 +35,14 @@ class ASMFaceLandmarker:
     
         faces = self.detector(gray)
         if len(faces) == 0:
-            return None
+            faces = []
+        
+        return gray, faces
+    
+
+    def detect_landmarks(self, img):
+
+        gray, faces = self.get_faces(img)
 
         shape = self.predictor(gray, faces[0])
         landmarks = np.array([(p.x, p.y) for p in shape.parts()])

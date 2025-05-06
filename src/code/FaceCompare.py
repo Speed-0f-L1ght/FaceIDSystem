@@ -27,10 +27,10 @@ def flatten_landmarks(landmarks):
     return landmarks.flatten()  # превращает (68, 2) в (136,)
 
 # Сравнение нового лица c обученной базой (сниженными признаками)
-def compare_new_face(new_img_path, landmarker, pca, reduced_features,  threshold=0.5):
-    img = cv2.imread(new_img_path)
+def compare_new_face(img, landmarker, pca, reduced_features,  threshold=0.5):
+    #img = cv2.imread(new_img_path)
 
-    landmarks = landmarker.detect_landmaks(img)
+    landmarks = landmarker.detect_landmarks(img)
     if landmarks is None:
         print("Лицо не обнаружено")
         return None
@@ -49,8 +49,10 @@ def compare_new_face(new_img_path, landmarker, pca, reduced_features,  threshold
     print(f"Минимальная дистанция: {min_distance:.4f}")
     if min_distance < threshold:
         print(f"Лицо найдено")
+        return True
     else:
         print("Лица не совпадают с эталонными")
+        return False
     #return min_distance
     
 

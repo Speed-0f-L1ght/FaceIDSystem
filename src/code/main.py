@@ -1,7 +1,7 @@
 from ASM import ASMFaceLandmarker, process_image
 import PCA_Face, FaceCompare
-import os, cv2
-import numpy as np
+import os
+import VideoFrame
 
 
 MODEL_PATH = os.path.join('src', 'models', 'ASM.dat')
@@ -18,8 +18,9 @@ def main():
 
     pca, reduced_features = PCA_Face.train_PCA(landmarker, INPUT_DIR)
 
-    FaceCompare.compare_new_face('Isaev.jpg', landmarker, pca, reduced_features, 0.3)
-    
+
+    #FaceCompare.compare_new_face('Isaev.jpg', landmarker, pca, reduced_features, 0.3)
+    VideoFrame.video(landmarker, pca, reduced_features, 0.3)
 
     #face_compare.compare_faces('src\img\Galkin2.jpg', 'src\img\Isaev.jpg', landmarker, pca)
 
