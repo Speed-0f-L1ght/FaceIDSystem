@@ -21,6 +21,17 @@ def euclidean_distance(vec1, vec2):
     """Возвращает различие признаков(в виде векторов) двух лиц"""
     return np.linalg.norm(vec1 - vec2)
 
+def align_face(landmarks, template_points):
+    src_points = np.array([landmarks[36], landmarks[45], landmarks[33]], dtype=np.float32)
+    
+    # template_points должны быть такого же размера, например:
+    # Определяем эталонные координаты для этих точек (зависит от ваших требований)
+    dst_points = np.array(template_points, dtype=np.float32)
+    
+    # Вычисляем аффинное преобразование
+    M = cv2.getAffineTransform(src_points, dst_points)
+    return M
+
 
 # Функция для "развертывания" ориентиров в одномерный вектор признаков
 def flatten_landmarks(landmarks):
@@ -35,7 +46,7 @@ def compare_new_face(img, landmarker, pca, reduced_features,  threshold=0.5):
         print("Лицо не обнаружено")
         return None
 
-    norm_landmarks = normalize_landmarks(landmarks)
+    norm_landmarks = align_face(landmarks)
     feature_vector = flatten_landmarks(norm_landmarks)
 
     # Преобразуем новый вектор через обученную модель PCA:
@@ -46,12 +57,12 @@ def compare_new_face(img, landmarker, pca, reduced_features,  threshold=0.5):
     min_index = np.argmin(distances)
     min_distance = distances[min_index]
 
-    print(f"Минимальная дистанция: {min_distance:.4f}")
+    #print(f"Минимальная дистанция: {min_distance:.4f}")
     if min_distance < threshold:
-        print(f"Лицо найдено")
+        #print(f"Лицо найдено")
         return True
     else:
-        print("Лица не совпадают с эталонными")
+        #print("Лица не совпадают с эталонными")
         return False
     #return min_distance
     
@@ -91,3 +102,13 @@ def compare_faces(image_path1, image_path2, landmarker, pca, threshold=0.5):
         print("Лица принадлежат разным людям.")
     
     return dist
+
+def get_embedding(img, landmarker, pca):
+    landmarks = landmarker.detect_landmarks(img)
+    if landmarks is None:
+        return None
+    norm_landmarks = align_face(landmarks, landmarker.template_points)
+    feature_vector = flatten_landmarks(norm_landmarks)
+    return pca.transform(feature_vector.reshape(1, -1))[0]
+
+

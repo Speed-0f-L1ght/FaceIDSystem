@@ -9,17 +9,21 @@ def train_PCA(landmarker, input_dir, n_components=50):
     photo_count = 0
     
     # Из указанного пути итеративно дастаются точки для каждого лица и созраняются в векторе
-    for filename in os.listdir(input_dir):
-        if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
-            path = os.path.join(input_dir, filename)
-            img = cv2.imread(path)
-            landmarks = landmarker.detect_landmarks(img)
-            if landmarks is not None:
-                norm_landmarks = FaceCompare.normalize_landmarks(landmarks)
-                feature_vector = FaceCompare.flatten_landmarks(norm_landmarks)
-                landmark_vectors.append(feature_vector)
-                photo_count += 1
-                #filenames.append(filename)
+    for root, dirs, files in os.walk(input_dir):
+        for filename in files:
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
+                path = os.path.join(root, filename)  # root - текущая папка
+                img = cv2.imread(path)
+                if img is None:
+                    continue  # На случай проблем с чтением файла
+                landmarks = landmarker.detect_landmarks(img)
+                landmarker.save_template_points()
+                if landmarks is not None:
+                    norm_landmarks = FaceCompare.align_face(landmarks, landmarker.template_points)
+                    feature_vector = FaceCompare.flatten_landmarks(norm_landmarks)
+                    landmark_vectors.append(feature_vector)
+                    photo_count += 1
+                        #filenames.append(filename)
 
     print(f'Колличество фотографий для обучения PCA: {photo_count}')
 
