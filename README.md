@@ -3,6 +3,8 @@
 
 Этот скрипт демонстрирует использование Active Shape Models (ASM) для обнаружения ключевых точек лица и Principal Component Analysis (PCA) для анализа или распознавания лиц, с последующей обработкой видео.
 
+![MVP решение](MVP.gif)
+
 ## Описание
 
 Основной скрипт `main.py` выполняет следующие шаги:
@@ -17,3 +19,4 @@
 * Python 3.x
 * Необходимые библиотеки Python, указанные в `requirements.txt` (вероятно, включая `opencv-python`, `numpy`, `scikit-learn` и ваши собственные модули `ASM`, `PCA_Face`, `FaceCompare`, `VideoFrame`).
 * Файл модели ASM (`ASM.dat`).
+
