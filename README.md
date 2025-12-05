@@ -3,7 +3,11 @@
 
 Этот скрипт демонстрирует использование Active Shape Models (ASM) для обнаружения ключевых точек лица и Principal Component Analysis (PCA) для анализа или распознавания лиц, с последующей обработкой видео.
 
-![MVP решение](MVP.gif)
+<p align="center">
+  <img src="https://github.com/Speed-0f-L1ght/FaceIDSystem/blob/main/MVP.gif" 
+       alt="Демонстрация работы бота" 
+       width="800">
+</p>
 
 ## Описание
 
