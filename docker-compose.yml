@@ -1,0 +1,10 @@
+services:
+  f-id-sys:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+       - 80:80
+    devices:
+      - /dev/video0:/dev/video0
+    privileged: true
