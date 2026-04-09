@@ -13,6 +13,8 @@ class ASMFaceLandmarker:
         self.detector = dlib.get_frontal_face_detector()
         # загрузка модели для поиска ориентиров
         self.predictor = dlib.shape_predictor(model_path)
+        self.all_landmarks = []
+        self.template_points = []
 
 
     def get_faces(self, img):
@@ -46,6 +48,7 @@ class ASMFaceLandmarker:
 
         shape = self.predictor(gray, faces[0])
         landmarks = np.array([(p.x, p.y) for p in shape.parts()])
+        self.all_landmarks.append(landmarks)
         return landmarks
 
     def draw_landmarks(self, image, landmarks):
@@ -54,7 +57,16 @@ class ASMFaceLandmarker:
             cv2.circle(image, (x, y), 2, (0, 255, 0), -1)
         return image
     
-
+    def save_template_points(self):
+        all_landmarks = np.array(self.all_landmarks)  # размер (N, 68, 2)
+        # Выберем, например, индексы для левого глаза (36), правого глаза (45) и носа (33)
+        left_eye_mean = np.mean(all_landmarks[:, 36, :], axis=0)
+        right_eye_mean = np.mean(all_landmarks[:, 45, :], axis=0)
+        nose_mean = np.mean(all_landmarks[:, 33, :], axis=0)
+        points = [left_eye_mean.tolist(), right_eye_mean.tolist(), nose_mean.tolist()]
+        self.template_points = points
+    
+    
 def process_image(image_path, landmarker):
     """Обрабатывает одно изображение – находит лицо, рисует ориентиры и сохраняет результат."""
     image = cv2.imread(image_path)

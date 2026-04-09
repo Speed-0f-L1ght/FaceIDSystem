@@ -1,5 +1,5 @@
-from ASM import ASMFaceLandmarker, process_image
-import PCA_Face, FaceCompare
+from ASM import ASMFaceLandmarker
+import PCA_Face, KNN_Face
 import os
 import VideoFrame
 
@@ -17,10 +17,18 @@ def Main():
     landmarker = ASMFaceLandmarker(MODEL_PATH)
 
     pca, reduced_features = PCA_Face.train_PCA(landmarker, INPUT_DIR)
+    landmarker.save_template_points()
 
+    first_labels = KNN_Face.Labels()
+    
+    first_labels.load_embeddings_labels("Fattahov","src/img/Fattahov", landmarker, pca)
+    first_labels.load_embeddings_labels("Galkin","src/img/Galkin", landmarker, pca)
+    first_labels.convert()
+
+    knn = KNN_Face.KNN(first_labels.embeddings, first_labels.labels)
 
     #FaceCompare.compare_new_face('Isaev.jpg', landmarker, pca, reduced_features, 0.3)
-    VideoFrame.video(landmarker, pca, reduced_features, 0.5)
+    VideoFrame.video(knn, landmarker, pca, reduced_features, 0.5)
 
     #face_compare.compare_faces('src\img\Galkin2.jpg', 'src\img\Isaev.jpg', landmarker, pca)
 
